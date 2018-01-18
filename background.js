@@ -13,16 +13,22 @@ function getPrices() {
 function update() {
     let prices = getPrices()
     if (prices && prices.bitflyer) {
-        updateBadge(prices['bitflyer'].price)
+        updateBadgeWithPrice(prices['bitflyer'].price)
     } else {
         console.warn('could not get any price, skip')
+        updateBadgeWithUnknown()
     }
 
 }
 
-function updateBadge(price) {
+function updateBadgeWithPrice(price) {
     let priceIn10Thousand = Math.ceil(price / 10000)
     chrome.browserAction.setBadgeText({ text: priceIn10Thousand.toString() + 'w' })
+}
+
+function updateBadgeWithUnknown() {
+    chrome.browserAction.setBadgeText({ text: '??' })
+    chrome.browserAction.setBadgeBackgroundColor({ color: '#FF0000' })
 }
 
 function start() {
@@ -50,3 +56,10 @@ if (chrome.runtime && chrome.runtime.onStartup) {
         start()
     })
 }
+
+chrome.management.getSelf((info) => {
+    if (info.installType === 'development') {
+        setup()
+        start()
+    }
+})
