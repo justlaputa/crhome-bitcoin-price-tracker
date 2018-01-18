@@ -1,5 +1,6 @@
 // background.js
 
+import bitflyer from './bitflyer-api'
 
 function getPrices() {
     //TODO dummy data
