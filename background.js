@@ -1,30 +1,26 @@
 // background.js
 
-import bitflyer from './bitflyer-api'
+let bitflyer = new Bitflyer('', '')
 
-function getPrices() {
-    //TODO dummy data
-    return {
-        bitflyer: {
-            price: Math.ceil((Math.random() + 1) * 1000000)
-        }
-    }
+function getPrice() {
+    return bitflyer.getboard().then(board => {
+        console.debug('get price from bitflyer api: ', board)
+        return board.mid_price
+    })
 }
 
 function update() {
-    let prices = getPrices()
-    if (prices && prices.bitflyer) {
-        updateBadgeWithPrice(prices['bitflyer'].price)
-    } else {
+    getPrice().then(price => {
+        updateBadgeWithPrice(price)
+    }).catch(err => {
         console.warn('could not get any price, skip')
         updateBadgeWithUnknown()
-    }
-
+    })
 }
 
 function updateBadgeWithPrice(price) {
-    let priceIn10Thousand = Math.ceil(price / 10000)
-    chrome.browserAction.setBadgeText({ text: priceIn10Thousand.toString() + 'w' })
+    let priceIn10Thousand = Math.ceil(price / 1000)
+    chrome.browserAction.setBadgeText({ text: priceIn10Thousand.toString() })
 }
 
 function updateBadgeWithUnknown() {
@@ -46,7 +42,7 @@ function onAlarm(alarm) {
 
 function setup() {
     chrome.alarms.onAlarm.addListener(onAlarm)
-    chrome.alarms.create('refresh', { periodInMinutes: 0.2 })
+    chrome.alarms.create('refresh', { periodInMinutes: 1 })
 }
 
 

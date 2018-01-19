@@ -1,11 +1,8 @@
 // bitflyer api client
 
-import request from 'request'
-import crypto from 'crypto'
-
 const API_ENDPOINTS = {
     BOARD: {
-        method: 'POST',
+        method: 'GET',
         path: '/board'
     }
 }
@@ -18,12 +15,15 @@ class Bitflyer {
     }
 
     getboard() {
-        call(API_ENDPOINTS.BOARD)
+        return this.call(API_ENDPOINTS.BOARD)
     }
 
-    call(endpoint) {
-
+    call(ep) {
+        let url = this.apiHostUrl + ep.path
+        let options = {
+            method: ep.method
+        }
+        
+        return fetch(url, options).then(r => r.json())
     }
 }
-
-export default bitflyer = new Bitflyer()
