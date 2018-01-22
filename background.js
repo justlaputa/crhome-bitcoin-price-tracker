@@ -29,6 +29,7 @@ function updateBadgeWithUnknown() {
 }
 
 function start() {
+    console.info('starting...')
     update()
 }
 
@@ -41,22 +42,10 @@ function onAlarm(alarm) {
 }
 
 function setup() {
+    console.info('creating periodical alarm...')
     chrome.alarms.onAlarm.addListener(onAlarm)
     chrome.alarms.create('refresh', { periodInMinutes: 1 })
 }
 
-
-if (chrome.runtime && chrome.runtime.onStartup) {
-    chrome.runtime.onStartup.addListener(() => {
-        console.log('starting...')
-        setup()
-        start()
-    })
-}
-
-chrome.management.getSelf((info) => {
-    if (info.installType === 'development') {
-        setup()
-        start()
-    }
-})
+setup()
+start()

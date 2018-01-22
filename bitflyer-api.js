@@ -23,7 +23,7 @@ class Bitflyer {
         let options = {
             method: ep.method
         }
-        
+
         return fetch(url, options).then(r => r.json())
     }
 }

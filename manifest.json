@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Bitcoin price traker",
   "description": "Track bitcoin price and show in extension icon badge",
-  "version": "1.0",
+  "version": "1.0.1",
   "background": {
     "scripts": [
       "bitflyer-api.js",
